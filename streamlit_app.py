@@ -6,7 +6,7 @@ import numpy as np
 model = pickle.load(open('best_model.pkl', 'rb'))
 model_columns = pickle.load(open('model_columns.pkl', 'rb'))
 
-# Collect user input (examples)
+# Collect user input
 total_sqft = st.number_input("Total Area (sqft)", min_value=300, max_value=10000)
 bath = st.slider("Number of Bathrooms", 1, 5)
 balcony = st.slider("Number of Balconies", 1, 3)
@@ -29,8 +29,6 @@ location_dummy = {
 
 if st.button("Predict Price"):
     # Construct a dictionary with keys matching model_columns
-    # For your actual app, you must match ALL the columns used in training!
-    # Include all numerical features and dummies.
     input_dict = {
         'total_sqft': total_sqft,
         'bath': bath,
@@ -39,7 +37,7 @@ if st.button("Predict Price"):
         **{f'location_{k}': v for k, v in zip(["Electronic City Phase II", "Uttarahalli", "Lingadheeranahalli", "Kothanur", "Other"], location_dummy[location])},
     }
 
-    # Create a row with zeros, then fill in the user's selections
+    # Created a row with zeros, then fill in the user's selections
     X_pred = np.zeros(len(model_columns))
     for idx, col in enumerate(model_columns):
         if col in input_dict:
